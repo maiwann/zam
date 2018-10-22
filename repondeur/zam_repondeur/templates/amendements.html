@@ -174,7 +174,8 @@
         padding: 1rem;
     }
 
-    :target {
+    :target,
+    .unknown {
         background: #ededed66;
     }
     /* To keep under :target for priority. */
@@ -366,6 +367,9 @@
                 id="{{ amendement.slug }}"
                 {% if amendement.slug == highlighted_amdt %}
                 class="highlighted"
+                {% endif %}
+                {% if not amendement.position %}
+                class="unknown"
                 {% endif %}
             >
                 <td class="bookmark" data-sortkey="{{ 0 if amendement.bookmarked_at else 1 }}">
