@@ -103,13 +103,23 @@ def parse_from_csv(row: dict, lecture: Lecture) -> Tuple[Amendement, bool]:
         amendement.article = article
     amendement.rectif = rectif
     amendement.alinea = row["Alinéa"].strip()
-    amendement.auteur = row["Auteur "]
+    amendement.auteur = extract_auteur(row)
+
     amendement.matricule = extract_matricule(row["Fiche Sénateur"])
+
     amendement.date_depot = parse_date(row["Date de dépôt "])
     amendement.sort = row["Sort "]
     amendement.dispositif = clean_html(row["Dispositif "])
     amendement.objet = clean_html(row["Objet "])
     return amendement, created
+
+
+def extract_auteur(row: dict) -> str:
+    auteur: str = row["Auteur "]
+    au_nom_de = row.get("Au nom de ", "")
+    if au_nom_de.startswith("commission"):
+        auteur += f", au nom de la {au_nom_de}"
+    return auteur
 
 
 FICHE_RE = re.compile(r"^[\w\/_]+(\d{5}[\da-z])\.html$")
